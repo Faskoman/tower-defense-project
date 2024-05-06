@@ -1,5 +1,4 @@
 import { useRef, useEffect } from "react";
-import { waypoint } from "./waypoints";
 
 function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -10,20 +9,27 @@ function Canvas() {
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
     const map = new Image();
 
     map.onload = () => {
-      ctx.drawImage(map, 0, 0);
+      animate();
     };
+
+    let x = 200;
+    function animate() {
+      requestAnimationFrame(animate);
+
+      ctx!.drawImage(map, 0, 0);
+
+      ctx!.fillStyle = "red"
+      ctx!.fillRect(x, 200, 50, 50);
+      x++;
+    }
 
     map.src = "/src/assets/gameMapZoomed.png";
   }, []);
 
-  return (
-    <canvas ref={canvasRef} width={1200} height={960}>
-    </canvas>
-  );
+  return <canvas ref={canvasRef} width={1200} height={960}></canvas>;
 }
 
 export default Canvas;

@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { waypoint, waypoints } from "./waypoints";
+import { waypoints } from "./waypoints";
 
 function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -23,11 +23,16 @@ function Canvas() {
       width: number;
       height: number;
       waypointIndex: number;
+      center: { x: number; y: number };
       constructor({ position = { x: 0, y: 0 } }) {
         this.position = position;
         this.width = 50;
         this.height = 50;
         this.waypointIndex = 0;
+        this.center = {
+          x: this.position.x + this.width / 2,
+          y: this.position.y + this.height / 2,
+        };
       }
 
       draw() {
@@ -44,16 +49,20 @@ function Canvas() {
         this.draw();
 
         const waypoint = waypoints[this.waypointIndex];
-        const yDistance = waypoint.y - this.position.y;
-        const xDistance = waypoint.x - this.position.x;
+        const yDistance = waypoint.y - this.center.y;
+        const xDistance = waypoint.x - this.center.x;
         const angle = Math.atan2(yDistance, xDistance);
 
         this.position.x += Math.cos(angle);
         this.position.y += Math.sin(angle);
+        this.center = {
+          x: this.position.x + this.width / 2,
+          y: this.position.y + this.height / 2,
+        };
 
         if (
-          this.position.x === waypoint.x &&
-          this.position.y === waypoint.y &&
+          Math.round(this.center.x) === Math.round(waypoint.x) &&
+          Math.round(this.center.y) === Math.round(waypoint.y) &&
           this.waypointIndex < waypoints.length - 1
         ) {
           this.waypointIndex++;
@@ -61,13 +70,23 @@ function Canvas() {
       }
     }
 
-    const enemy = new Enemy({ position: { x: waypoints[0].x, y: waypoints[0].y } });
+    const enemies: Enemy[] = [];
+    for (let i = 1; i < 11; i++) {
+      const xOffset = i * 150;
+      enemies.push(
+        new Enemy({
+          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },
+        })
+      );
+    }
 
     function animate() {
       requestAnimationFrame(animate);
 
       ctx!.drawImage(map, 0, 0);
-      enemy.update();
+      enemies.forEach((enemy) => {
+        enemy.update();
+      });
     }
   }, []);
 

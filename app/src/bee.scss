@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100%;
 }
 
 .bee {
@@ -16,6 +16,7 @@
     border: 10px solid black;
     width: 300px;
     position: relative;
+    z-index: 2; 
 
     &::after {
         content: "";
@@ -82,7 +83,11 @@
     border: 4px solid black;
     rotate: 15deg;
 
-    &.--left-eye::before {
+    &.--right-eye {
+        z-index: 3;
+    }
+
+    &.--right-eye::before {
         content: "";
         position: absolute;
         background-color: black;
@@ -92,7 +97,7 @@
         margin: 30% 50%;
     }
 
-    &.--left-eye::after {
+    &.--right-eye::after {
         content: "";
         position: absolute;
         background-color: white;
@@ -107,7 +112,7 @@
         right: 10%;
         top: -5%;
         scale: .9;
-        z-index: -1;
+        z-index: 1;
     }
 }
 
@@ -148,7 +153,11 @@
         rotate: -25deg;
         left: 15%;
         scale: .8;
-        z-index: -1;
+        z-index: 1;
+    }
+
+    &:nth-child(2) {
+        z-index: 3;
     }
 }
 
@@ -164,6 +173,7 @@
     left:  82%;
     top: -33%;
     rotate: 35deg;
+    z-index: 3;
 
     &::after {
         content: "";

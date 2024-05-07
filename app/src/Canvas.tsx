@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 import { waypoints } from "./waypoints";
+import Bee from "./Bee";
+import "./bee.scss";
 
 function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -36,9 +38,6 @@ function Canvas() {
       }
 
       draw() {
-        const bee = new Image();
-        bee.src = "/public/bee.html";
-        ctx!.fillStyle = "red";
         ctx!.fillRect(
           this.position.x,
           this.position.y,
@@ -92,13 +91,14 @@ function Canvas() {
     }
   }, []);
 
-  return <canvas ref={canvasRef} width={1200} height={960}></canvas>;
-}
-
-function Bee() {
-  return <>
-  
-  </>;
+  return (
+    <canvas
+      className="canvas"
+      ref={canvasRef}
+      width={1200}
+      height={960}
+    ></canvas>
+  );
 }
 
 export default Canvas;

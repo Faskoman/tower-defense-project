@@ -36,6 +36,8 @@ function Canvas() {
       }
 
       draw() {
+        const bee = new Image();
+        bee.src = "/public/bee.html";
         ctx!.fillStyle = "red";
         ctx!.fillRect(
           this.position.x,
@@ -91,6 +93,12 @@ function Canvas() {
   }, []);
 
   return <canvas ref={canvasRef} width={1200} height={960}></canvas>;
+}
+
+function Bee() {
+  return <>
+  
+  </>;
 }
 
 export default Canvas;

@@ -1,6 +1,5 @@
 import { useRef, useEffect } from "react";
 import { waypoints } from "./waypoints";
-import Bee from "./Bee";
 import "./bee.scss";
 
 function Canvas() {
@@ -13,11 +12,13 @@ function Canvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const map = new Image();
+    const bee = new Image();
 
     map.onload = () => {
       animate();
     };
 
+    bee.src = "/src/assets/bee2.png";
     map.src = "/src/assets/gameMapZoomed.png";
 
     class Enemy {
@@ -26,10 +27,11 @@ function Canvas() {
       height: number;
       waypointIndex: number;
       center: { x: number; y: number };
+      component: any;
       constructor({ position = { x: 0, y: 0 } }) {
         this.position = position;
-        this.width = 50;
-        this.height = 50;
+        this.width = 80;
+        this.height = 80;
         this.waypointIndex = 0;
         this.center = {
           x: this.position.x + this.width / 2,
@@ -38,7 +40,8 @@ function Canvas() {
       }
 
       draw() {
-        ctx!.fillRect(
+        ctx!.drawImage(
+          bee,
           this.position.x,
           this.position.y,
           this.width,

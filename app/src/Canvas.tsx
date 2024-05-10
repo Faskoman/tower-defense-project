@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { waypoints } from "./waypoints";
 import "./bee.scss";
+import "./canvas.scss";
 
 function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

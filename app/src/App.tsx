@@ -1,14 +1,14 @@
-import './App.scss'
-import Canvas from './Canvas'
-import './canvas.scss'
+import "./App.scss";
+import Canvas from "./Canvas";
+import MainMenu from "./MainMenu";
 
 function App() {
-
   return (
     <>
-      <Canvas/>
+      <MainMenu />
+      {/* <Canvas /> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

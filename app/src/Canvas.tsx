@@ -75,8 +75,8 @@ function Canvas() {
     }
 
     const enemies: Enemy[] = [];
-    for (let i = 1; i < 11; i++) {
-      const xOffset = i * 150;
+    for (let i = 1; i < 21; i++) {
+      const xOffset = i * 100;
       enemies.push(
         new Enemy({
           position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },

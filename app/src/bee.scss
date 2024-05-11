@@ -2,11 +2,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 100vw;
+    z-index: 2;
+
+    &:nth-child(2) {
+        animation: beeRotate 40s ease-in infinite normal forwards;
+    }
 }
 
 .bee {
     position: relative;
+    inset: 20vw 7vw;
+    animation: hover 10s ease infinite normal forwards;
+
+
 }
 
 .bee__body {
@@ -16,7 +25,7 @@
     border: 10px solid black;
     width: 300px;
     position: relative;
-    z-index: 2; 
+    z-index: 2;
 
     &::after {
         content: "";
@@ -116,48 +125,53 @@
     }
 }
 
-.bee__wings__wing {
-    position: absolute;
-    background-color: #DFECFC;
-    aspect-ratio: 4/7;
-    height: 90%;
-    top: -70%;
-    left: 35%;
-    border: 5px solid black;
-    border-radius: 50%;
-    rotate: 20deg;
+.bee__wings {
 
-    &::before,
-    &::after {
-        content: "";
-        background-color: black;
+    &__wing {
         position: absolute;
-    }
-
-    &::before {
-        height: 2px;
-        width: 50%;
+        background-color: #cee4ff;
+        aspect-ratio: 4/7;
+        height: 90%;
+        top: -70%;
+        left: 20%;
+        border: 5px solid black;
         border-radius: 50%;
-        margin: 90% 27%;
-    }
+        rotate: 10deg;
 
-    &::after {
-        height: 80%;
-        width: 5px;
-        margin: 50%;
-        bottom: -30%;
-        border-radius: 50% 50% 0 0;
-    }
+        &::before,
+        &::after {
+            content: "";
+            background-color: black;
+            position: absolute;
+        }
 
-    &:nth-child(1) {
-        rotate: -25deg;
-        left: 15%;
-        scale: .8;
-        z-index: 1;
-    }
+        &::before {
+            height: 2px;
+            width: 50%;
+            border-radius: 50%;
+            margin: 90% 27%;
+        }
 
-    &:nth-child(2) {
-        z-index: 3;
+        &::after {
+            height: 80%;
+            width: 5px;
+            margin: 50%;
+            bottom: -30%;
+            border-radius: 50% 50% 0 0;
+        }
+
+        &:nth-child(1) {
+            rotate: -25deg;
+            left: 25%;
+            scale: .8;
+            z-index: 1;
+            animation: wingFlap 100ms linear 50ms infinite normal forwards;
+        }
+
+        &:nth-child(2) {
+            z-index: 4;
+            animation: wingFlap 100ms linear infinite normal forwards;
+        }
     }
 }
 
@@ -165,12 +179,12 @@
     position: absolute;
     background-color: transparent;
     height: 50%;
-    aspect-ratio: 2 / 7 ;
+    aspect-ratio: 2 / 7;
     border: 1px solid black;
     border-width: 4px 0 0 4px;
     border-radius: 50%;
     transform: rotatex(20deg);
-    left:  82%;
+    left: 82%;
     top: -33%;
     rotate: 35deg;
     z-index: 3;
@@ -186,7 +200,7 @@
     }
 
     &:nth-child(1) {
-        left:  74%;
+        left: 74%;
         rotate: 2deg;
         border-width: 4px 0 0 4px;
 
@@ -194,5 +208,115 @@
             scale: .7;
             inset: 2% 45%;
         }
+    }
+}
+
+.background-bee {
+    scale: .2;
+    animation: leftToRight 20s linear 0s infinite normal forwards;
+}
+
+
+@keyframes beeRotate {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+        transform-origin: 50% 50%;
+    }
+
+    10%,
+    90% {
+        transform: rotate(8deg);
+    }
+
+    20%,
+    40%,
+    60% {
+        transform: rotate(-10deg);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: rotate(10deg);
+    }
+
+    80% {
+        transform: rotate(-8deg);
+    }
+}
+
+@keyframes wingFlap {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+        transform-origin: 25% 100%;
+    }
+
+    25%,
+    75% {
+        transform: rotate(20deg);
+    }
+
+    50% {
+        transform: rotate(-20deg);
+    }
+}
+
+@keyframes hover {
+    0% {
+        transform: translate(0);
+    }
+
+    10% {
+        transform: translate(-2rem, -2rem);
+    }
+
+    20% {
+        transform: translate(2rem, -2rem);
+    }
+
+    30% {
+        transform: translate(-2rem, 2rem);
+    }
+
+    40% {
+        transform: translate(2rem, 2rem);
+    }
+
+    50% {
+        transform: translate(-2rem, -2rem);
+    }
+
+    60% {
+        transform: translate(2rem, -2rem);
+    }
+
+    70% {
+        transform: translate(-2rem, 2rem);
+    }
+
+    80% {
+        transform: translate(-2rem, -2rem);
+    }
+
+    90% {
+        transform: translate(2rem, -2rem);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+@keyframes leftToRight {
+    0% {
+        transform: translateX(-600vw);
+    }
+
+    100% {
+        transform: translateX(800vw);
     }
 }

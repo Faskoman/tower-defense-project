@@ -1,0 +1,71 @@
+:root {
+    --leaf-color: #008000;
+}
+
+.flower {
+    transform: translate(10vw, 8vw) rotateZ(-25deg);
+    z-index: 1;
+
+    &__stem {
+        aspect-ratio: 1/2;
+        background-color: transparent;
+        border: 1px solid var(--leaf-color);
+        border-color: var(--leaf-color);
+        border-width: 0 3vw 0 0;
+        border-radius: 50%;
+        height: 70vh;
+    }
+
+    &__bud {
+        position: relative;
+        inset: -10vw 1vw;
+
+        &__petals {
+            position: absolute;
+            background: radial-gradient(circle, rgba(203, 0, 0, 1) 22%, rgba(255, 0, 0, 1) 56%);
+            aspect-ratio: 1/3;
+            width: 10vw;
+            border-radius: 20vw;
+            inset: -6vw 6vw;
+            z-index: 1;
+
+            &:nth-child(2) {
+                rotate: 120deg;
+            }
+
+            &:nth-child(3) {
+                rotate: 240deg;
+            }
+        }
+
+        &__head {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 255, 0, 1) 52%, rgba(255, 142, 0, 1) 80%);
+            aspect-ratio: 1;
+            width: 10vw;
+            border-radius: 50%;
+            transform: translate(6vw, 4vw);
+            z-index: 2;
+        }
+    }
+
+    &__leaves {
+
+        &__leaf {
+            position: absolute;
+            background-color: var(--leaf-color);
+            border-radius: 15vw 0 15vw 0;
+            aspect-ratio: 2/1;
+            width: 15vw;
+            inset: 18vh 21vw;
+            rotate: 10deg;
+
+            &:nth-child(2) {
+                scale: .8;
+                rotate: 20deg;
+                inset: 33vh 6vw;
+            }
+        }
+    }
+
+}

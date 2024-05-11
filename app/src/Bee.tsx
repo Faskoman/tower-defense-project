@@ -1,9 +1,17 @@
-import "./Bee.scss"
+import "./Bee.scss";
 
-function Bee() {
+type BeeProps = {
+  yPosition?: number;
+  scale?: number;
+};
+
+function Bee({ yPosition = 0, scale = 1 }: BeeProps) {
   return (
     <div className="centered-flex">
-      <div className="bee">
+     <div
+        className="bee"
+        style={{ scale: `${scale}` }}
+      >
         <div className="bee__body">
           <div>
             <div className="bee__body__stripes"></div>

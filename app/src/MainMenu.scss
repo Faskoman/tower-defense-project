@@ -1,3 +1,8 @@
+:root {
+    --sky-color: #a3e5ff;
+    --leaf-color: #008000;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -5,7 +10,7 @@
 
 .container {
     overflow: hidden;
-    background-color: skyblue;
+    background-color: var(--sky-color);
     display: flex;
     justify-content: center;
     align-items: end;
@@ -21,8 +26,8 @@
     &__stem {
         aspect-ratio: 1/2;
         background-color: transparent;
-        border: 1px solid green;
-        border-color: green;
+        border: 1px solid var(--leaf-color);
+        border-color: var(--leaf-color);
         border-width: 0 3vw 0 0;
         border-radius: 50%;
         height: 70vh;
@@ -58,6 +63,25 @@
             border-radius: 50%;
             transform: translate(6vw, 4vw);
             z-index: 2;
+        }
+    }
+
+    &__leaves {
+
+        &__leaf {
+            position: absolute;
+            background-color: var(--leaf-color);
+            border-radius: 15vw 0 15vw 0;
+            aspect-ratio: 2/1;
+            width: 15vw;
+            inset: 18vh 21vw;
+            rotate: 10deg;
+
+            &:nth-child(2) {
+                scale: .8;
+                rotate: 20deg;
+                inset: 33vh 6vw;
+            }
         }
     }
 
@@ -197,21 +221,21 @@
         border: 5px solid black;
         border-radius: 50%;
         rotate: 10deg;
-    
+
         &::before,
         &::after {
             content: "";
             background-color: black;
             position: absolute;
         }
-    
+
         &::before {
             height: 2px;
             width: 50%;
             border-radius: 50%;
             margin: 90% 27%;
         }
-    
+
         &::after {
             height: 80%;
             width: 5px;
@@ -219,7 +243,7 @@
             bottom: -30%;
             border-radius: 50% 50% 0 0;
         }
-    
+
         &:nth-child(1) {
             rotate: -25deg;
             left: 25%;
@@ -227,7 +251,7 @@
             z-index: 1;
             animation: wingFlap 100ms linear 50ms infinite normal forwards;
         }
-    
+
         &:nth-child(2) {
             z-index: 4;
             animation: wingFlap 100ms linear infinite normal forwards;
@@ -272,92 +296,95 @@
 }
 
 @keyframes beeRotate {
-	0%,
-	100% {
-		transform: rotate(0deg);
-		transform-origin: 50% 50%;
-	}
 
-	10%,
+    0%,
+    100% {
+        transform: rotate(0deg);
+        transform-origin: 50% 50%;
+    }
+
+    10%,
     90% {
-		transform: rotate(8deg);
-	}
+        transform: rotate(8deg);
+    }
 
-	20%,
-	40%,
-	60% {
-		transform: rotate(-10deg);
-	}
+    20%,
+    40%,
+    60% {
+        transform: rotate(-10deg);
+    }
 
-	30%,
-	50%,
-	70% {
-		transform: rotate(10deg);
-	}
+    30%,
+    50%,
+    70% {
+        transform: rotate(10deg);
+    }
 
-	80% {
-		transform: rotate(-8deg);
-	}
+    80% {
+        transform: rotate(-8deg);
+    }
 }
 
 @keyframes wingFlap {
-	0%,
-	100% {
-		transform: rotate(0deg);
-		transform-origin: 25% 100%;
-	}
 
-	25%, 75% {
-		transform: rotate(20deg);
-	}
+    0%,
+    100% {
+        transform: rotate(0deg);
+        transform-origin: 25% 100%;
+    }
 
-	50% {
-		transform: rotate(-20deg);
-	}
+    25%,
+    75% {
+        transform: rotate(20deg);
+    }
+
+    50% {
+        transform: rotate(-20deg);
+    }
 }
 
 @keyframes hover {
-	0% {
-		transform: translate(0);
-	}
+    0% {
+        transform: translate(0);
+    }
 
-	10% {
-		transform: translate(-2rem, -2rem);
-	}
+    10% {
+        transform: translate(-2rem, -2rem);
+    }
 
-	20% {
-		transform: translate(2rem, -2rem);
-	}
+    20% {
+        transform: translate(2rem, -2rem);
+    }
 
-	30% {
-		transform: translate(-2rem, 2rem);
-	}
+    30% {
+        transform: translate(-2rem, 2rem);
+    }
 
-	40% {
-		transform: translate(2rem, 2rem);
-	}
+    40% {
+        transform: translate(2rem, 2rem);
+    }
 
-	50% {
-		transform: translate(-2rem, -2rem);
-	}
+    50% {
+        transform: translate(-2rem, -2rem);
+    }
 
-	60% {
-		transform: translate(2rem, -2rem);
-	}
+    60% {
+        transform: translate(2rem, -2rem);
+    }
 
-	70% {
-		transform: translate(-2rem, 2rem);
-	}
+    70% {
+        transform: translate(-2rem, 2rem);
+    }
 
-	80% {
-		transform: translate(-2rem, -2rem);
-	}
+    80% {
+        transform: translate(-2rem, -2rem);
+    }
 
-	90% {
-		transform: translate(2rem, -2rem);
-	}
+    90% {
+        transform: translate(2rem, -2rem);
+    }
 
-	100% {
-		transform: translate(0);
-	}
+    100% {
+        transform: translate(0);
+    }
 }

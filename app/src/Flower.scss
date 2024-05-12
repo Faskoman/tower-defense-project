@@ -57,13 +57,13 @@
             border-radius: 15vw 0 15vw 0;
             aspect-ratio: 2/1;
             width: 15vw;
-            inset: 18vh 21vw;
-            rotate: 10deg;
+            inset: 21vh 18vw;
+            rotate: 12deg;
+            scale: .8;
 
             &:nth-child(2) {
-                scale: .8;
-                rotate: 20deg;
-                inset: 33vh 6vw;
+                rotate: 12deg;
+                inset: 34vh 3vw;
             }
         }
     }

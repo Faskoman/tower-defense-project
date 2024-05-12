@@ -1,3 +1,4 @@
+import { PropsWithChildren } from "react";
 import "./Bee.scss";
 
 type BeeProps = {
@@ -5,10 +6,10 @@ type BeeProps = {
   scale?: number;
 };
 
-function Bee({ topLocation = 18, scale = 1 }: BeeProps) {
+export function Bee({ topLocation = 25, scale = 1 }: BeeProps) {
   return (
     <div className="centered-flex">
-     <div
+      <div
         className="bee"
         style={{ scale: `${scale}`, top: `${topLocation}%` }}
       >
@@ -36,4 +37,18 @@ function Bee({ topLocation = 18, scale = 1 }: BeeProps) {
   );
 }
 
-export default Bee;
+type BackgroundBeeProps = {
+  startingDelayInSeconds?: number;
+  scale?: number;
+  topLocation?: number;
+};
+
+export function BackgroundBee({
+  startingDelayInSeconds = 0, scale, topLocation
+}: PropsWithChildren<BackgroundBeeProps>) {
+  return (
+    <div className="background-bee" style={{ animation: `leftToRight 20s linear infinite normal forwards`, animationDelay: `${startingDelayInSeconds}s` }}>
+      <Bee scale={scale} topLocation={topLocation}/>
+    </div>
+  );
+}

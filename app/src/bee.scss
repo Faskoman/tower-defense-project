@@ -5,7 +5,7 @@
     height: 100vw;
     z-index: 2;
     
-    &:nth-child(2) {
+    &:nth-child(3) {
         animation: beeRotate 40s ease-in infinite normal forwards;
     }
 }
@@ -14,8 +14,6 @@
     position: relative;
     inset: 20vw 7vw;
     animation: hover 20s ease infinite normal forwards;
-    // top: 20px;
-    
 }
 
 .bee__body {
@@ -212,7 +210,7 @@
 }
 
 .background-bee {
-    animation: leftToRight 20s linear 0s infinite normal forwards;
+    opacity: 0;
 }
 
 
@@ -312,10 +310,12 @@
 
 @keyframes leftToRight {
     0% {
-        transform: translateX(-500vw);
+        transform: translateX(-300vw);
+        opacity: 1;
     }
 
     100% {
         transform: translateX(600vw);
+        opacity: 1;
     }
 }

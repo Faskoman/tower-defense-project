@@ -6,8 +6,8 @@ import Menu from "./Menu";
 function MainMenu() {
   return (
     <>
-      <div className="container">
         <Menu />
+      <div className="container">
         <BackgroundBee
           scale={0.1}
           topLocation={15}

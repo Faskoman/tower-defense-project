@@ -11,8 +11,8 @@ function Menu() {
               Hello <span className="menu__user-display__username">{user}</span>
             </p>
             <p className="menu__buttons">New game</p>
-            <p className="menu__buttons">continue</p>
-            <p className="menu__buttons">Logout</p>
+            <p className="menu__buttons">Continue</p>
+            <p className="menu__buttons --logout-button">Logout</p>
           </>
         ) : (
           <>

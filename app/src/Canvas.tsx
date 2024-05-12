@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { waypoints } from "./waypoints";
-import "./bee.scss";
 import "./canvas.scss";
+import { placements } from "./placements";
 
 function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,6 +14,46 @@ function Canvas() {
     if (!ctx) return;
     const map = new Image();
     const bee = new Image();
+
+    const placement2D = [];
+    const tilesInARow = 40;
+
+    for (let i = 0; i < placements.length; i += tilesInARow) {
+      placement2D.push(placements.slice(i, i + tilesInARow));
+    }
+
+    class PlacementTile {
+      position = { x: 0, y: 0 };
+      size: number;
+      color: string;
+      constructor({ position = { x: 0, y: 0 } }) {
+        this.position = position;
+        this.size = 32;
+        this.color = "rgba(255, 255, 255, 0.3)";
+      }
+
+      draw() {
+        ctx!.fillStyle = this.color;
+        ctx!.fillRect(this.position.x, this.position.y, this.size, this.size);
+      }
+    }
+
+    const placementTiles: PlacementTile[] = [];
+
+    placement2D.forEach((row, y) => {
+      row.forEach((symbol, x) => {
+        if (symbol === 1) {
+          placementTiles.push(
+            new PlacementTile({
+              position: {
+                x: x * 32,
+                y: y * 32,
+              },
+            })
+          );
+        }
+      });
+    });
 
     map.onload = () => {
       animate();
@@ -91,6 +131,10 @@ function Canvas() {
       ctx!.drawImage(map, 0, 0);
       enemies.forEach((enemy) => {
         enemy.update();
+      });
+
+      placementTiles.forEach((tile) => {
+        tile.draw();
       });
     }
   }, []);

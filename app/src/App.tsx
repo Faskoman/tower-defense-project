@@ -1,12 +1,12 @@
 import "./App.scss";
 import Canvas from "./Canvas";
-import MainMenu from "./MainMenu";
+// import MainMenu from "./MainMenu";
 
 function App() {
   return (
     <>
-      <MainMenu />
-      {/* <Canvas /> */}
+      {/* <MainMenu /> */}
+      <Canvas />
     </>
   );
 }

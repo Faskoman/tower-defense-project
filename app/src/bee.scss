@@ -4,7 +4,7 @@
     align-items: center;
     height: 100vw;
     z-index: 2;
-
+    
     &:nth-child(2) {
         animation: beeRotate 40s ease-in infinite normal forwards;
     }
@@ -13,9 +13,9 @@
 .bee {
     position: relative;
     inset: 20vw 7vw;
-    animation: hover 10s ease infinite normal forwards;
-
-
+    animation: hover 20s ease infinite normal forwards;
+    // top: 20px;
+    
 }
 
 .bee__body {
@@ -312,10 +312,10 @@
 
 @keyframes leftToRight {
     0% {
-        transform: translateX(-600vw);
+        transform: translateX(-500vw);
     }
 
     100% {
-        transform: translateX(800vw);
+        transform: translateX(600vw);
     }
 }

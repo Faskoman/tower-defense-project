@@ -7,9 +7,9 @@ function MainMenu() {
     <>
       <div className="container">
         <div className="background-bee">
-          <Bee scale={.2} yPosition={50}/>
+          <Bee scale={.2} topLocation={0}/>
         </div>
-        <Bee yPosition={10}/>
+        <Bee />
         <Flower />
       </div>
     </>

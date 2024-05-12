@@ -1,16 +1,16 @@
 import "./Bee.scss";
 
 type BeeProps = {
-  yPosition?: number;
+  topLocation?: number;
   scale?: number;
 };
 
-function Bee({ yPosition = 0, scale = 1 }: BeeProps) {
+function Bee({ topLocation = 18, scale = 1 }: BeeProps) {
   return (
     <div className="centered-flex">
      <div
         className="bee"
-        style={{ scale: `${scale}` }}
+        style={{ scale: `${scale}`, top: `${topLocation}%` }}
       >
         <div className="bee__body">
           <div>

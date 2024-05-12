@@ -17,6 +17,10 @@ function Canvas() {
 
     const placement2D = [];
     const tilesInARow = 40;
+    const mouse = {
+      x: 0,
+      y: 0,
+    };
 
     for (let i = 0; i < placements.length; i += tilesInARow) {
       placement2D.push(placements.slice(i, i + tilesInARow));
@@ -35,6 +39,19 @@ function Canvas() {
       draw() {
         ctx!.fillStyle = this.color;
         ctx!.fillRect(this.position.x, this.position.y, this.size, this.size);
+      }
+
+      update(mouse: { x: number; y: number }) {
+        this.draw();
+
+        if (
+          mouse.x > this.position.x &&
+          mouse.x < this.position.x + this.size &&
+          mouse.y > this.position.y &&
+          mouse.y < this.position.y + this.size
+        ) {
+          console.log("Hovered!")
+        }
       }
     }
 
@@ -134,9 +151,20 @@ function Canvas() {
       });
 
       placementTiles.forEach((tile) => {
-        tile.draw();
+        tile.update(mouse);
       });
     }
+
+    const handleMouseHover = (event: { clientX: number; clientY: number }) => {
+      mouse.x = event.clientX;
+      mouse.y = event.clientY;
+    };
+
+    canvas.addEventListener("mousemove", handleMouseHover);
+
+    return () => {
+      canvas.removeEventListener("mousemove", handleMouseHover);
+    };
   }, []);
 
   return (

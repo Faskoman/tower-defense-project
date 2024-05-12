@@ -38,16 +38,16 @@ export function Bee({ topLocation = 25, scale = 1 }: BeeProps) {
 }
 
 type BackgroundBeeProps = {
-  startingDelayInSeconds?: number;
-  scale?: number;
-  topLocation?: number;
+  startingDelayInSeconds: number;
+  scale: number;
+  topLocation: number;
 };
 
 export function BackgroundBee({
   startingDelayInSeconds = 0, scale, topLocation
 }: PropsWithChildren<BackgroundBeeProps>) {
   return (
-    <div className="background-bee" style={{ animation: `leftToRight 20s linear infinite normal forwards`, animationDelay: `${startingDelayInSeconds}s` }}>
+    <div className="background-bee" style={{ animation: `leftToRight 18s linear infinite normal forwards`, animationDelay: `${startingDelayInSeconds}s` }}>
       <Bee scale={scale} topLocation={topLocation}/>
     </div>
   );

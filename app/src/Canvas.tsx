@@ -33,7 +33,7 @@ function Canvas() {
       constructor({ position = { x: 0, y: 0 } }) {
         this.position = position;
         this.size = 32;
-        this.color = "rgba(255, 255, 255, 0.3)";
+        this.color = "transparent";
       }
 
       draw() {
@@ -50,8 +50,9 @@ function Canvas() {
           mouse.y > this.position.y &&
           mouse.y < this.position.y + this.size
         ) {
-          console.log("Hovered!")
-        }
+          console.log("Hovered!");
+          this.color = "rgba(255, 255, 255, 0.4)";
+        } else {this.color = "transparent"}
       }
     }
 

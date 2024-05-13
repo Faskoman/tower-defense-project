@@ -78,7 +78,7 @@ function Canvas() {
     };
 
     bee.src = "/src/assets/bee2.png";
-    map.src = "/src/assets/gameMapZoomed.png";
+    map.src = "/src/assets/gameMapZoomed2.png";
 
     class Enemy {
       position: { x: number; y: number };

@@ -90,6 +90,7 @@ function Canvas() {
       waypointIndex: number;
       center: { x: number; y: number };
       component: any;
+      health: number;
       constructor({ position = { x: 0, y: 0 } }) {
         this.position = position;
         this.width = 80;
@@ -99,6 +100,7 @@ function Canvas() {
           x: this.position.x + this.width / 2,
           y: this.position.y + this.height / 2,
         };
+        this.health = 100;
       }
 
       draw() {
@@ -168,15 +170,16 @@ function Canvas() {
         this.draw();
 
         const angle = Math.atan2(
-          enemies[0].center.y - this.position.y,
-          enemies[0].center.x - this.position.x
+          this.enemy.center.y - this.position.y,
+          this.enemy.center.x - this.position.x
         );
 
-        this.velocity.x = Math.cos(angle);
-        this.velocity.y = Math.sin(angle);
+        const speedMultiplier = 4;
+        this.velocity.x = Math.cos(angle) * speedMultiplier;
+        this.velocity.y = Math.sin(angle) * speedMultiplier;
 
-        this.position.x += this.velocity.x * 2;
-        this.position.y += this.velocity.y * 2;
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
       }
     }
 
@@ -185,6 +188,9 @@ function Canvas() {
       size: number;
       projectiles: Projectile[];
       center: { x: number; y: number };
+      radius: number;
+      target: Enemy | null;
+      frames: number;
       constructor({ position = { x: 0, y: 0 } }) {
         this.position = position;
         this.size = 64;
@@ -192,20 +198,36 @@ function Canvas() {
           x: this.position.x + this.size / 2,
           y: this.position.y + this.size / 2,
         };
-        this.projectiles = [
-          new Projectile({
-            position: {
-              x: this.center.x,
-              y: this.center.y,
-            },
-            enemy: enemies[0],
-          }),
-        ];
+        this.projectiles = [];
+        this.radius = 250;
+        this.target = null;
+        this.frames = 0;
       }
 
       draw() {
         ctx!.fillStyle = "blue";
         ctx?.fillRect(this.position.x, this.position.y, this.size, this.size);
+
+        ctx!.beginPath();
+        ctx?.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2);
+        ctx!.fillStyle = "rgba(0, 0, 255, .1)";
+        ctx?.fill();
+      }
+
+      update() {
+        this.draw();
+        if (this.frames % 100 === 0 && this.target) {
+          this.projectiles.push(
+            new Projectile({
+              position: {
+                x: this.center.x,
+                y: this.center.y,
+              },
+              enemy: this.target,
+            })
+          );
+        }
+        this.frames++;
       }
     }
 
@@ -226,28 +248,49 @@ function Canvas() {
       requestAnimationFrame(animate);
 
       ctx!.drawImage(map, 0, 0);
-      enemies.forEach((enemy) => {
+
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        const enemy = enemies[i];
         enemy.update();
-      });
+      }
 
       placementTiles.forEach((tile) => {
         tile.update(mouse);
       });
 
       buildings.forEach((building) => {
-        building.draw();
+        building.update();
+        building.target = null;
+        const inRangeEnemies = enemies.filter((enemy) => {
+          const xDifference = enemy.center.x - building.center.x;
+          const yDifference = enemy.center.y - building.center.y;
+          const distance = Math.hypot(xDifference, yDifference);
+          return distance < enemy.width / 3 + building.radius;
+        });
+        building.target = inRangeEnemies[0];
 
-        building.projectiles.forEach((projectile, i) => {
+        for (let i = building.projectiles.length - 1; i >= 0; i--) {
+          const projectile = building.projectiles[i];
+
           projectile.update();
 
           const xDifference = projectile.enemy.center.x - projectile.position.x;
           const yDifference = projectile.enemy.center.y - projectile.position.y;
           const distance = Math.hypot(xDifference, yDifference);
+
           if (distance < projectile.enemy.width / 2) {
+            projectile.enemy.health -= 50;
+            if (projectile.enemy.health <= 0) {
+              const enemyIndex = enemies.findIndex((enemy) => {
+                return projectile.enemy === enemy;
+              });
+
+              if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
+            }
+            console.log(projectile.enemy.health);
             building.projectiles.splice(i, 1);
           }
-          console.log(distance);
-        });
+        }
       });
     }
 

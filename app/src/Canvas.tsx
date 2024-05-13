@@ -139,12 +139,14 @@ function Canvas() {
     class Projectile {
       position: { x: number; y: number };
       velocity: { x: number; y: number };
-      constructor({ position = { x: 0, y: 0 } }) {
+      enemy: Enemy;
+      constructor({ position = { x: 0, y: 0 }, enemy }: { position?: { x: number; y: number }; enemy: Enemy }) {
         this.position = position;
         this.velocity = {
           x: 0,
           y: 0,
         };
+        this.enemy = enemy;
       }
 
       draw() {
@@ -165,8 +167,8 @@ function Canvas() {
         this.velocity.x = Math.cos(angle);
         this.velocity.y = Math.sin(angle);
 
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
+        this.position.x += this.velocity.x * 2;
+        this.position.y += this.velocity.y * 2;
       }
     }
 
@@ -188,6 +190,7 @@ function Canvas() {
               x: this.center.x,
               y: this.center.y,
             },
+            enemy: enemies[0],
           }),
         ];
       }
@@ -228,6 +231,11 @@ function Canvas() {
 
         building.projectiles.forEach((projectile) => {
           projectile.update();
+
+          const xDifference = projectile.enemy.center.x - projectile.position.x
+          const yDifference = projectile.enemy.center.y - projectile.position.y
+          const distance = Math.hypot(xDifference, yDifference)
+          console.log(distance)
         });
       });
     }

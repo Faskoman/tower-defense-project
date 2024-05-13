@@ -140,18 +140,26 @@ function Canvas() {
       position: { x: number; y: number };
       velocity: { x: number; y: number };
       enemy: Enemy;
-      constructor({ position = { x: 0, y: 0 }, enemy }: { position?: { x: number; y: number }; enemy: Enemy }) {
+      radius: number;
+      constructor({
+        position = { x: 0, y: 0 },
+        enemy,
+      }: {
+        position?: { x: number; y: number };
+        enemy: Enemy;
+      }) {
         this.position = position;
         this.velocity = {
           x: 0,
           y: 0,
         };
         this.enemy = enemy;
+        this.radius = 10;
       }
 
       draw() {
         ctx?.beginPath();
-        ctx!.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
+        ctx!.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
         ctx!.fillStyle = "red";
         ctx?.fill();
       }
@@ -229,13 +237,16 @@ function Canvas() {
       buildings.forEach((building) => {
         building.draw();
 
-        building.projectiles.forEach((projectile) => {
+        building.projectiles.forEach((projectile, i) => {
           projectile.update();
 
-          const xDifference = projectile.enemy.center.x - projectile.position.x
-          const yDifference = projectile.enemy.center.y - projectile.position.y
-          const distance = Math.hypot(xDifference, yDifference)
-          console.log(distance)
+          const xDifference = projectile.enemy.center.x - projectile.position.x;
+          const yDifference = projectile.enemy.center.y - projectile.position.y;
+          const distance = Math.hypot(xDifference, yDifference);
+          if (distance < projectile.enemy.width / 2) {
+            building.projectiles.splice(i, 1);
+          }
+          console.log(distance);
         });
       });
     }

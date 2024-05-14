@@ -1,3 +1,59 @@
-.canvas {
-    z-index: -999;
+.game-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-over {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: fit-content;
+    height: fit-content;
+    padding: 2rem;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: white;
+
+
+    &__text {
+        font-size: 4rem;
+        margin-block: 2rem;
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: space-evenly;
+
+        &__button {
+            color: white;
+        }
+    }
+}
+
+.wave-count {
+    inset: 1rem 2rem;
+    color: yellow;
+
+
+}
+
+.lives-display {
+    color: rgb(188, 0, 0);
+    right: 2rem;
+    top: 1rem;
+}
+
+.wave-count,
+.lives-display {
+    height: fit-content;
+    width: fit-content;
+    position: absolute;
+    font-weight: 800;
+    font-size: xx-large;
+    -webkit-text-stroke: 1px black;
+    text-shadow: 0px 0px 10px rgba(255,255,255,0.9);
 }

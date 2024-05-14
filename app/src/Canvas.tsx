@@ -1,10 +1,13 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { waypoints } from "./waypoints";
-import "./canvas.scss";
 import { placements } from "./placements";
+import "./canvas.scss";
 
 function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [wave, setWave] = useState(0);
+  const [lives, setLives] = useState(10);
+  const [isGameRunning, setIsGameRunning] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,12 +33,12 @@ function Canvas() {
       position = { x: 0, y: 0 };
       size: number;
       color: string;
-      isOccipied: boolean;
+      isOccupied: boolean;
       constructor({ position = { x: 0, y: 0 } }) {
         this.position = position;
         this.size = 64;
         this.color = "transparent";
-        this.isOccipied = false;
+        this.isOccupied = false;
       }
 
       draw() {
@@ -126,7 +129,7 @@ function Canvas() {
         const xDistance = waypoint.x - this.center.x;
         const angle = Math.atan2(yDistance, xDistance);
 
-        const speed = 10;
+        const speed = 4;
 
         this.velocity.x = Math.cos(angle) * speed;
         this.velocity.y = Math.sin(angle) * speed;
@@ -254,22 +257,42 @@ function Canvas() {
           })
         );
       }
+      setWave((prevWave) => prevWave + 1);
     }
 
     const buildings: Building[] = [];
     let activeTile: any = undefined;
     let enemyCount = 4;
+    let hearts = lives;
 
-    spawnEnemies(Math.round(enemyCount));
+    if (isGameRunning) {
+      spawnEnemies(Math.round(enemyCount));
+    }
 
     function animate() {
-      requestAnimationFrame(animate);
+      const animationId = requestAnimationFrame(animate);
 
       ctx!.drawImage(map, 0, 0);
 
       for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
         enemy.update();
+
+        if (enemy.position.x > canvas!.width) {
+          setLives((prevLives) => prevLives - 1);
+          hearts--;
+          enemies.splice(i, 1);
+
+          if (hearts === 0) {
+            cancelAnimationFrame(animationId);
+            setIsGameRunning(false);
+          }
+        }
+      }
+
+      if (enemies.length === 0 && isGameRunning) {
+        enemyCount *= 1.25;
+        spawnEnemies(enemyCount);
       }
 
       placementTiles.forEach((tile) => {
@@ -304,12 +327,6 @@ function Canvas() {
               });
 
               if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
-            }
-
-            if (enemies.length === 0) {
-              enemyCount *= 1.25;
-              spawnEnemies(enemyCount);
-              console.log(enemyCount);
             }
 
             building.projectiles.splice(i, 1);
@@ -356,15 +373,41 @@ function Canvas() {
     return () => {
       canvas.removeEventListener("mousemove", handleMouseHover);
     };
-  }, []);
+  }, [isGameRunning]);
+
+  function restartGame() {
+    setLives(10);
+    setWave(0);
+    setIsGameRunning(true);
+  }
 
   return (
-    <canvas
-      className="canvas"
-      ref={canvasRef}
-      width={1280}
-      height={820}
-    ></canvas>
+    <div className="game-container">
+      <canvas
+        className="canvas"
+        ref={canvasRef}
+        width={1280}
+        height={820}
+      ></canvas>
+      <div className="wave-count">Wave: {wave}</div>
+      <div className="lives-display">Lives: {lives}</div>
+      {!isGameRunning ? (
+        <div className="game-over">
+          <p className="game-over__text">game over!</p>
+          <span className="game-over__buttons">
+            <button className="game-over__buttons__button">menu</button>
+            <button
+              className="game-over__buttons__button"
+              onClick={restartGame}
+            >
+              restart
+            </button>
+          </span>
+        </div>
+      ) : (
+        ""
+      )}
+    </div>
   );
 }
 

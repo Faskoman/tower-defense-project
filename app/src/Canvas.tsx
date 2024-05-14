@@ -232,17 +232,23 @@ function Canvas() {
     }
 
     const enemies: Enemy[] = [];
-    for (let i = 1; i < 21; i++) {
-      const xOffset = i * 100;
-      enemies.push(
-        new Enemy({
-          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },
-        })
-      );
+
+    function spawnEnemies(spawnCount: number) {
+      for (let i = 1; i <= spawnCount; i++) {
+        const xOffset = i * 100;
+        enemies.push(
+          new Enemy({
+            position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },
+          })
+        );
+      }
     }
 
     const buildings: Building[] = [];
     let activeTile: any = undefined;
+    let enemyCount = 4;
+
+    spawnEnemies(Math.round(enemyCount));
 
     function animate() {
       requestAnimationFrame(animate);
@@ -279,7 +285,7 @@ function Canvas() {
           const distance = Math.hypot(xDifference, yDifference);
 
           if (distance < projectile.enemy.width / 2) {
-            projectile.enemy.health -= 50;
+            projectile.enemy.health -= 100;
             if (projectile.enemy.health <= 0) {
               const enemyIndex = enemies.findIndex((enemy) => {
                 return projectile.enemy === enemy;
@@ -287,7 +293,13 @@ function Canvas() {
 
               if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
             }
-            console.log(projectile.enemy.health);
+
+            if (enemies.length === 0) {
+              enemyCount *= 1.25;
+              spawnEnemies(enemyCount);
+              console.log(enemyCount);
+            }
+
             building.projectiles.splice(i, 1);
           }
         }

@@ -42,9 +42,15 @@
 }
 
 .lives-display {
-    color: rgb(188, 0, 0);
+    color: rgb(255, 0, 0);
     right: 2rem;
     top: 1rem;
+    display: flex;
+    align-items: center;
+
+    &__heart {
+        height: 1.2em;
+    }
 }
 
 .wave-count,
@@ -55,5 +61,5 @@
     font-weight: 800;
     font-size: xx-large;
     -webkit-text-stroke: 1px black;
-    text-shadow: 0px 0px 10px rgba(255,255,255,0.9);
+    text-shadow: 0px 0px 10px rgba(255,255,255,0.3);
 }

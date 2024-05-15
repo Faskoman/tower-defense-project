@@ -37,6 +37,69 @@ export function useGameSetup(
       placement2D.push(placements.slice(i, i + tilesInARow));
     }
 
+    class Enemy {
+      position: { x: number; y: number };
+      size: number;
+      waypointIndex: number;
+      center: { x: number; y: number };
+      health: number;
+      velocity: { x: number; y: number };
+
+      constructor({ position = { x: 0, y: 0 } }) {
+        this.position = position;
+        this.size = 80;
+        this.waypointIndex = 0;
+        this.center = {
+          x: this.position.x + this.size / 2,
+          y: this.position.y + this.size / 2,
+        };
+        this.health = 100;
+        this.velocity = {
+          x: 0,
+          y: 0,
+        };
+      }
+
+      draw() {
+        ctx!.drawImage(
+          bee,
+          this.position.x,
+          this.position.y,
+          this.size,
+          this.size
+        );
+      }
+
+      update() {
+        this.draw();
+
+        const waypoint = waypoints[this.waypointIndex];
+        const yDistance = waypoint.y - this.center.y;
+        const xDistance = waypoint.x - this.center.x;
+        const angle = Math.atan2(yDistance, xDistance);
+
+        this.velocity.x = Math.cos(angle) * enemiesSpeed;
+        this.velocity.y = Math.sin(angle) * enemiesSpeed;
+
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+        this.center = {
+          x: this.position.x + this.size / 2,
+          y: this.position.y + this.size / 2,
+        };
+
+        if (
+          Math.abs(Math.round(this.center.x) - Math.round(waypoint.x)) <
+            Math.abs(this.velocity.x) &&
+          Math.abs(Math.round(this.center.y) - Math.round(waypoint.y)) <
+            Math.abs(this.velocity.y) &&
+          this.waypointIndex < waypoints.length - 1
+        ) {
+          this.waypointIndex++;
+        }
+      }
+    }
+
     class PlacementTile {
       position = { x: 0, y: 0 };
       size: number;
@@ -96,69 +159,6 @@ export function useGameSetup(
     zapper.src = "./src/assets/bugZapper.png";
     electricBolt.src = "./src/assets/electricBolt2.png";
     map.src = "./src/assets/gameMapZoomed2.png";
-
-    class Enemy {
-      position: { x: number; y: number };
-      width: number;
-      height: number;
-      waypointIndex: number;
-      center: { x: number; y: number };
-      health: number;
-      velocity: { x: number; y: number };
-
-      constructor({ position = { x: 0, y: 0 } }) {
-        this.position = position;
-        this.width = 80;
-        this.height = 80;
-        this.waypointIndex = 0;
-        this.center = {
-          x: this.position.x + this.width / 2,
-          y: this.position.y + this.height / 2,
-        };
-        this.health = 100;
-        this.velocity = {
-          x: 0,
-          y: 0,
-        };
-      }
-
-      draw() {
-        ctx!.drawImage(
-          bee,
-          this.position.x,
-          this.position.y,
-          this.width,
-          this.height
-        );
-      }
-
-      update() {
-        const waypoint = waypoints[this.waypointIndex];
-        const yDistance = waypoint.y - this.center.y;
-        const xDistance = waypoint.x - this.center.x;
-        const angle = Math.atan2(yDistance, xDistance);
-
-        this.velocity.x = Math.cos(angle) * enemiesSpeed;
-        this.velocity.y = Math.sin(angle) * enemiesSpeed;
-
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
-        this.center = {
-          x: this.position.x + this.width / 2,
-          y: this.position.y + this.height / 2,
-        };
-
-        if (
-          Math.abs(Math.round(this.center.x) - Math.round(waypoint.x)) <
-            Math.abs(this.velocity.x) &&
-          Math.abs(Math.round(this.center.y) - Math.round(waypoint.y)) <
-            Math.abs(this.velocity.y) &&
-          this.waypointIndex < waypoints.length - 1
-        ) {
-          this.waypointIndex++;
-        }
-      }
-    }
 
     class Projectile {
       position: { x: number; y: number };
@@ -232,9 +232,9 @@ export function useGameSetup(
       draw() {
         ctx!.drawImage(
           zapper,
-          this.position.x,
+          this.position.x - this.size / 4.5,
           this.position.y,
-          this.size,
+          this.size + this.size / 2,
           this.size
         );
         ctx!.beginPath();
@@ -322,7 +322,7 @@ export function useGameSetup(
           const xDifference = enemy.center.x - building.center.x;
           const yDifference = enemy.center.y - building.center.y;
           const distance = Math.hypot(xDifference, yDifference);
-          return distance < enemy.width / 3 + building.radius;
+          return distance < enemy.size / 3 + building.radius;
         });
         building.target = inRangeEnemies[0];
 
@@ -335,7 +335,7 @@ export function useGameSetup(
           const yDifference = projectile.enemy.center.y - projectile.position.y;
           const distance = Math.hypot(xDifference, yDifference);
 
-          if (distance < projectile.enemy.width / 2) {
+          if (distance < projectile.enemy.size / 2) {
             projectile.enemy.health -= 50;
             if (projectile.enemy.health <= 0) {
               const enemyIndex = enemies.findIndex((enemy) => {
@@ -395,5 +395,5 @@ export function useGameSetup(
     return () => {
       canvas.removeEventListener("mousemove", handleMouseHover);
     };
-  }, [canvasRef, isGameRunning]);
+  }, [isGameRunning]);
 }

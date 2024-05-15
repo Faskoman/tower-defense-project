@@ -19,6 +19,8 @@ function Canvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const map = new Image();
+    const zapper = new Image();
+    const electricBolt = new Image();
     const bee = new Image();
 
     const placement2D = [];
@@ -89,6 +91,8 @@ function Canvas() {
 
     bee.src = "/src/assets/bee2.png";
     map.src = "/src/assets/gameMapZoomed2.png";
+    zapper.src = "/src/assets/bugZapper.png";
+    electricBolt.src = "/src/assets/electricBolt2.png";
 
     class Enemy {
       position: { x: number; y: number };
@@ -159,7 +163,7 @@ function Canvas() {
       position: { x: number; y: number };
       velocity: { x: number; y: number };
       enemy: Enemy;
-      radius: number;
+      size: number;
       constructor({
         position = { x: 0, y: 0 },
         enemy,
@@ -173,14 +177,17 @@ function Canvas() {
           y: 0,
         };
         this.enemy = enemy;
-        this.radius = 10;
+        this.size = 40;
       }
 
       draw() {
-        ctx?.beginPath();
-        ctx!.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-        ctx!.fillStyle = "red";
-        ctx?.fill();
+        ctx!.drawImage(
+          electricBolt,
+          this.position.x,
+          this.position.y,
+          this.size,
+          this.size
+        );
       }
 
       update() {
@@ -191,7 +198,7 @@ function Canvas() {
           this.enemy.center.x - this.position.x
         );
 
-        const projectileSpeed = 4;
+        const projectileSpeed = 3;
         this.velocity.x = Math.cos(angle) * projectileSpeed;
         this.velocity.y = Math.sin(angle) * projectileSpeed;
 
@@ -222,12 +229,16 @@ function Canvas() {
       }
 
       draw() {
-        ctx!.fillStyle = "blue";
-        ctx?.fillRect(this.position.x, this.position.y, this.size, this.size);
-
+        ctx!.drawImage(
+          zapper,
+          this.position.x,
+          this.position.y,
+          this.size,
+          this.size
+        );
         ctx!.beginPath();
         ctx?.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2);
-        ctx!.fillStyle = "rgba(0, 0, 255, .1)";
+        ctx!.fillStyle = "rgba(255, 255, 255, .05)";
         ctx?.fill();
       }
 
@@ -259,7 +270,7 @@ function Canvas() {
           })
         );
       }
-      enemiesSpeed += .1;
+      enemiesSpeed += 0.1;
       setWave((wave) => wave + 1);
     }
 
@@ -323,7 +334,7 @@ function Canvas() {
           const distance = Math.hypot(xDifference, yDifference);
 
           if (distance < projectile.enemy.width / 2) {
-            projectile.enemy.health -= 100;
+            projectile.enemy.health -= 50;
             if (projectile.enemy.health <= 0) {
               const enemyIndex = enemies.findIndex((enemy) => {
                 return projectile.enemy === enemy;

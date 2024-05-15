@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useGameSetup } from "./gameSetup";
 import "./canvas.scss";
 
-function Canvas() {
+function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [wave, setWave] = useState(0);
   const [lives, setLives] = useState(10);
@@ -76,4 +76,4 @@ function Canvas() {
   );
 }
 
-export default Canvas;
+export default GamePage;

@@ -1,12 +1,12 @@
+// import GamePage from "./GamePage";
+import MainMenu from "./MainMenu";
 import "./App.scss";
-import Canvas from "./Canvas";
-// import MainMenu from "./MainMenu";
 
 function App() {
   return (
     <>
-      {/* <MainMenu /> */}
-      <Canvas />
+      <MainMenu />
+      {/* <GamePage /> */}
     </>
   );
 }

@@ -92,7 +92,7 @@ export function useGameSetup(
       setIsGameRunning(true);
     };
 
-    bee.src = "./src/assets/bee2.png";
+    bee.src = "./src/assets/bee3.png";
     zapper.src = "./src/assets/bugZapper.png";
     electricBolt.src = "./src/assets/electricBolt2.png";
     map.src = "./src/assets/gameMapZoomed2.png";
@@ -108,8 +108,8 @@ export function useGameSetup(
 
       constructor({ position = { x: 0, y: 0 } }) {
         this.position = position;
-        this.width = 32;
-        this.height = 32;
+        this.width = 80;
+        this.height = 80;
         this.waypointIndex = 0;
         this.center = {
           x: this.position.x + this.width / 2,

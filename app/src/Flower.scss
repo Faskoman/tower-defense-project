@@ -13,12 +13,12 @@
         border-color: var(--leaf-color);
         border-width: 0 3vw 0 0;
         border-radius: 50%;
-        height: 70vh;
+        width: 17vw;
     }
 
     &__bud {
         position: relative;
-        inset: -30vh -3vh;
+        inset: -12vw 0vw;
 
         &__petals {
             position: absolute;
@@ -57,13 +57,13 @@
             border-radius: 15vw 0 15vw 0;
             aspect-ratio: 2/1;
             width: 15vw;
-            inset: 21vh 18vw;
+            inset: 9vw 18vw;
             rotate: 12deg;
             scale: .8;
 
             &:nth-child(2) {
                 rotate: 12deg;
-                inset: 34vh 3vw;
+                inset: 15vw 3.2vw;
             }
         }
     }

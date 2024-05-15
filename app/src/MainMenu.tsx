@@ -13,13 +13,13 @@ function MainMenu() {
           topLocation={15}
           startingDelayInSeconds={4}
         />
+          <Bee />
+          <Flower />
         <BackgroundBee
           scale={0.1}
           topLocation={10}
           startingDelayInSeconds={0}
         />
-        <Bee />
-        <Flower />
         <BackgroundBee
           scale={0.2}
           topLocation={8}

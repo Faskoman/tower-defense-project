@@ -9,6 +9,7 @@ function Canvas() {
   const [lives, setLives] = useState(10);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [currency, setCurrency] = useState(100);
   // const [enemiesSpeed, setEnemiesSpeed] = useState(4);
   let enemiesSpeed = 2;
 
@@ -278,6 +279,7 @@ function Canvas() {
     let activeTile: any = undefined;
     let enemyCount = 4;
     let hearts = lives;
+    let money = currency;
 
     if (isGameRunning) {
       spawnEnemies(Math.round(enemyCount));
@@ -340,7 +342,11 @@ function Canvas() {
                 return projectile.enemy === enemy;
               });
 
-              if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
+              if (enemyIndex > -1) {
+                enemies.splice(enemyIndex, 1);
+                setCurrency((prevCurrency) => prevCurrency + 15);
+                money += 15;
+              }
             }
 
             building.projectiles.splice(i, 1);
@@ -370,8 +376,10 @@ function Canvas() {
 
     canvas.addEventListener("mousemove", handleMouseHover);
 
-    canvas.addEventListener("click", (e) => {
-      if (activeTile && !activeTile.isOccupied) {
+    canvas.addEventListener("click", () => {
+      if (activeTile && !activeTile.isOccupied && money - 100 >= 0) {
+        setCurrency((currency) => currency - 100);
+        money -= 100;
         buildings.push(
           new Building({
             position: {
@@ -390,9 +398,6 @@ function Canvas() {
   }, [isGameRunning]);
 
   function restartGame() {
-    // setLives(10);
-    // setWave(0);
-    // setGameOver(false);
     window.location.reload();
   }
 
@@ -405,6 +410,10 @@ function Canvas() {
         height={820}
       ></canvas>
       <div className="wave-count">Wave: {wave}</div>
+      <div className="currency-display">
+        <span>$</span>
+        {currency}
+      </div>
       <div className="lives-display">
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -6,20 +6,20 @@ import Menu from "./Menu";
 function MainMenu() {
   return (
     <>
-        <Menu />
+      <Menu />
       <div className="container">
         <BackgroundBee
           scale={0.1}
           topLocation={15}
           startingDelayInSeconds={4}
         />
-          <Bee />
-          <Flower />
         <BackgroundBee
           scale={0.1}
           topLocation={10}
           startingDelayInSeconds={0}
         />
+        <Bee />
+        <Flower />
         <BackgroundBee
           scale={0.2}
           topLocation={8}
@@ -28,7 +28,7 @@ function MainMenu() {
         <BackgroundBee
           scale={0.25}
           topLocation={20}
-          startingDelayInSeconds={0}
+          startingDelayInSeconds={9}
         />
         <BackgroundBee
           scale={0.3}

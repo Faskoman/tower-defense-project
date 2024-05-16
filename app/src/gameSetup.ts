@@ -1,13 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { waypoints } from "./waypoints";
 import { placements } from "./placements";
-import {
-  Enemy,
-  createEnemy,
-  Building,
-  createBuilding,
-  updateBuilding,
-} from "./entities/entities.ts";
 
 export function useGameSetup(
   canvasRef: React.RefObject<HTMLCanvasElement>,
@@ -38,9 +31,73 @@ export function useGameSetup(
 
     let enemiesSpeed = 1;
     let lives = 10;
+    let currency = 100;
 
     for (let i = 0; i < placements.length; i += tilesInARow) {
       placement2D.push(placements.slice(i, i + tilesInARow));
+    }
+
+    class Enemy {
+      position: { x: number; y: number };
+      size: number;
+      waypointIndex: number;
+      center: { x: number; y: number };
+      health: number;
+      velocity: { x: number; y: number };
+
+      constructor({ position = { x: 0, y: 0 } }) {
+        this.position = position;
+        this.size = 80;
+        this.waypointIndex = 0;
+        this.center = {
+          x: this.position.x + this.size / 2,
+          y: this.position.y + this.size / 2,
+        };
+        this.health = 100;
+        this.velocity = {
+          x: 0,
+          y: 0,
+        };
+      }
+
+      draw() {
+        ctx!.drawImage(
+          bee,
+          this.position.x,
+          this.position.y,
+          this.size,
+          this.size
+        );
+      }
+
+      update() {
+        this.draw();
+
+        const waypoint = waypoints[this.waypointIndex];
+        const yDistance = waypoint.y - this.center.y;
+        const xDistance = waypoint.x - this.center.x;
+        const angle = Math.atan2(yDistance, xDistance);
+
+        this.velocity.x = Math.cos(angle) * enemiesSpeed;
+        this.velocity.y = Math.sin(angle) * enemiesSpeed;
+
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+        this.center = {
+          x: this.position.x + this.size / 2,
+          y: this.position.y + this.size / 2,
+        };
+
+        if (
+          Math.abs(Math.round(this.center.x) - Math.round(waypoint.x)) <
+            Math.abs(this.velocity.x) &&
+          Math.abs(Math.round(this.center.y) - Math.round(waypoint.y)) <
+            Math.abs(this.velocity.y) &&
+          this.waypointIndex < waypoints.length - 1
+        ) {
+          this.waypointIndex++;
+        }
+      }
     }
 
     class PlacementTile {
@@ -103,14 +160,116 @@ export function useGameSetup(
     electricBolt.src = "./src/assets/electricBolt2.png";
     map.src = "./src/assets/gameMapZoomed2.png";
 
+    class Projectile {
+      position: { x: number; y: number };
+      velocity: { x: number; y: number };
+      enemy: Enemy;
+      size: number;
+      constructor({
+        position = { x: 0, y: 0 },
+        enemy,
+      }: {
+        position?: { x: number; y: number };
+        enemy: Enemy;
+      }) {
+        this.position = position;
+        this.velocity = {
+          x: 0,
+          y: 0,
+        };
+        this.enemy = enemy;
+        this.size = 40;
+      }
+
+      draw() {
+        ctx!.drawImage(
+          electricBolt,
+          this.position.x,
+          this.position.y,
+          this.size,
+          this.size
+        );
+      }
+
+      update() {
+        this.draw();
+
+        const angle = Math.atan2(
+          this.enemy.center.y - this.position.y,
+          this.enemy.center.x - this.position.x
+        );
+
+        const projectileSpeed = 3;
+        this.velocity.x = Math.cos(angle) * projectileSpeed;
+        this.velocity.y = Math.sin(angle) * projectileSpeed;
+
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+      }
+    }
+
+    class Building {
+      position: { x: number; y: number };
+      size: number;
+      projectiles: Projectile[];
+      center: { x: number; y: number };
+      radius: number;
+      target: Enemy | null;
+      frames: number;
+      constructor({ position = { x: 0, y: 0 } }) {
+        this.position = position;
+        this.size = 64;
+        this.center = {
+          x: this.position.x + this.size / 2,
+          y: this.position.y + this.size / 2,
+        };
+        this.projectiles = [];
+        this.radius = 250;
+        this.target = null;
+        this.frames = 0;
+      }
+
+      draw() {
+        ctx!.drawImage(
+          zapper,
+          this.position.x - this.size / 4.5,
+          this.position.y,
+          this.size + this.size / 2,
+          this.size
+        );
+        ctx!.beginPath();
+        ctx?.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2);
+        ctx!.fillStyle = "rgba(255, 255, 255, .05)";
+        ctx?.fill();
+      }
+
+      update() {
+        this.draw();
+        if (this.frames % 100 === 0 && this.target) {
+          this.projectiles.push(
+            new Projectile({
+              position: {
+                x: this.center.x,
+                y: this.center.y,
+              },
+              enemy: this.target,
+            })
+          );
+        }
+        this.frames++;
+      }
+    }
+
     const enemies: Enemy[] = [];
+
     function spawnEnemies(spawnCount: number) {
       for (let i = 1; i <= spawnCount; i++) {
         const xOffset = i * 100;
-        const enemy = createEnemy({
-          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },
-        });
-        enemies.push(enemy);
+        enemies.push(
+          new Enemy({
+            position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },
+          })
+        );
       }
       enemiesSpeed += 0.1;
       setWave((wave) => wave + 1);
@@ -120,6 +279,7 @@ export function useGameSetup(
     let activeTile: any = undefined;
     let enemyCount = 4;
     let hearts = lives;
+    let money = currency;
 
     if (isGameRunning) {
       spawnEnemies(Math.round(enemyCount));
@@ -132,7 +292,7 @@ export function useGameSetup(
 
       for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
-        enemy.update(ctx!, bee, waypoints, enemiesSpeed);
+        enemy.update();
 
         if (enemy.position.x > canvas!.width) {
           setLives((prevLives) => prevLives - 1);
@@ -156,35 +316,23 @@ export function useGameSetup(
       });
 
       buildings.forEach((building) => {
-        // Update building and draw it
-        updateBuilding(
-          ctx!,
-          building,
-          zapper,
-          building.projectiles,
-          building.frames
-        );
+        building.update();
         building.target = null;
-
         const inRangeEnemies = enemies.filter((enemy) => {
-          const xDifference = enemy.position.x - building.center.x;
-          const yDifference = enemy.position.y - building.center.y;
+          const xDifference = enemy.center.x - building.center.x;
+          const yDifference = enemy.center.y - building.center.y;
           const distance = Math.hypot(xDifference, yDifference);
           return distance < enemy.size / 3 + building.radius;
         });
-
-        if (inRangeEnemies.length > 0) {
-          building.target = inRangeEnemies[0];
-        }
+        building.target = inRangeEnemies[0];
 
         for (let i = building.projectiles.length - 1; i >= 0; i--) {
           const projectile = building.projectiles[i];
-          projectile.update(ctx!);
 
-          const xDifference =
-            projectile.enemy.position.x - projectile.position.x;
-          const yDifference =
-            projectile.enemy.position.y - projectile.position.y;
+          projectile.update();
+
+          const xDifference = projectile.enemy.center.x - projectile.position.x;
+          const yDifference = projectile.enemy.center.y - projectile.position.y;
           const distance = Math.hypot(xDifference, yDifference);
 
           if (distance < projectile.enemy.size / 2) {
@@ -197,61 +345,55 @@ export function useGameSetup(
               if (enemyIndex > -1) {
                 enemies.splice(enemyIndex, 1);
                 setCurrency((prevCurrency) => prevCurrency + 5);
+                money += 5;
               }
             }
+
             building.projectiles.splice(i, 1);
           }
         }
       });
-
-      const handleMouseHover = (e: { clientX: number; clientY: number }) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-
-        activeTile = null;
-        for (let i = 0; i < placementTiles.length; i++) {
-          const tile = placementTiles[i];
-          if (
-            mouse.x > tile.position.x &&
-            mouse.x < tile.position.x + tile.size &&
-            mouse.y > tile.position.y &&
-            mouse.y < tile.position.y + tile.size
-          ) {
-            activeTile = tile;
-            break;
-          }
-        }
-      };
-
-      canvas!.addEventListener("mousemove", handleMouseHover);
-
-      canvas!.addEventListener("click", () => {
-        if (activeTile && !activeTile.isOccupied && setCurrency) {
-          setCurrency((prevCurrency) => {
-            if (prevCurrency - 100 >= 0) {
-              addBuilding(buildings, activeTile);
-              return prevCurrency - 100;
-            }
-            return prevCurrency;
-          });
-        }
-      });
-
-      return () => {
-        canvas!.removeEventListener("mousemove", handleMouseHover);
-      };
     }
-  }, [isGameRunning]);
-}
 
-function addBuilding(buildings: Building[], activeTile: any) {
-  buildings.push(
-    createBuilding({
-      position: {
-        x: activeTile.position.x,
-        y: activeTile.position.y,
-      },
-    })
-  );
-  activeTile.isOccupied = true;
+    const handleMouseHover = (e: { clientX: number; clientY: number }) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+
+      activeTile = null;
+      for (let i = 0; i < placementTiles.length; i++) {
+        const tile = placementTiles[i];
+        if (
+          mouse.x > tile.position.x &&
+          mouse.x < tile.position.x + tile.size &&
+          mouse.y > tile.position.y &&
+          mouse.y < tile.position.y + tile.size
+        ) {
+          activeTile = tile;
+          break;
+        }
+      }
+    };
+
+    canvas.addEventListener("mousemove", handleMouseHover);
+
+    canvas.addEventListener("click", () => {
+      if (activeTile && !activeTile.isOccupied && money - 100 >= 0) {
+        setCurrency((currency) => currency - 100);
+        money -= 100;
+        buildings.push(
+          new Building({
+            position: {
+              x: activeTile.position.x,
+              y: activeTile.position.y,
+            },
+          })
+        );
+        activeTile.isOccupied = true;
+      }
+    });
+
+    return () => {
+      canvas.removeEventListener("mousemove", handleMouseHover);
+    };
+  }, [isGameRunning]);
 }

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { waypoints } from "./waypoints";
 import { placements } from "./placements";
+import { Enemy, createEnemy } from "./entities/Enemy.ts";
 
 export function useGameSetup(
   canvasRef: React.RefObject<HTMLCanvasElement>,
@@ -35,69 +36,6 @@ export function useGameSetup(
 
     for (let i = 0; i < placements.length; i += tilesInARow) {
       placement2D.push(placements.slice(i, i + tilesInARow));
-    }
-
-    class Enemy {
-      position: { x: number; y: number };
-      size: number;
-      waypointIndex: number;
-      center: { x: number; y: number };
-      health: number;
-      velocity: { x: number; y: number };
-
-      constructor({ position = { x: 0, y: 0 } }) {
-        this.position = position;
-        this.size = 80;
-        this.waypointIndex = 0;
-        this.center = {
-          x: this.position.x + this.size / 2,
-          y: this.position.y + this.size / 2,
-        };
-        this.health = 100;
-        this.velocity = {
-          x: 0,
-          y: 0,
-        };
-      }
-
-      draw() {
-        ctx!.drawImage(
-          bee,
-          this.position.x,
-          this.position.y,
-          this.size,
-          this.size
-        );
-      }
-
-      update() {
-        this.draw();
-
-        const waypoint = waypoints[this.waypointIndex];
-        const yDistance = waypoint.y - this.center.y;
-        const xDistance = waypoint.x - this.center.x;
-        const angle = Math.atan2(yDistance, xDistance);
-
-        this.velocity.x = Math.cos(angle) * enemiesSpeed;
-        this.velocity.y = Math.sin(angle) * enemiesSpeed;
-
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
-        this.center = {
-          x: this.position.x + this.size / 2,
-          y: this.position.y + this.size / 2,
-        };
-
-        if (
-          Math.abs(Math.round(this.center.x) - Math.round(waypoint.x)) <
-            Math.abs(this.velocity.x) &&
-          Math.abs(Math.round(this.center.y) - Math.round(waypoint.y)) <
-            Math.abs(this.velocity.y) &&
-          this.waypointIndex < waypoints.length - 1
-        ) {
-          this.waypointIndex++;
-        }
-      }
     }
 
     class PlacementTile {
@@ -261,15 +199,13 @@ export function useGameSetup(
     }
 
     const enemies: Enemy[] = [];
-
     function spawnEnemies(spawnCount: number) {
       for (let i = 1; i <= spawnCount; i++) {
         const xOffset = i * 100;
-        enemies.push(
-          new Enemy({
-            position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },
-          })
-        );
+        const enemy = createEnemy({
+          position: { x: waypoints[0].x - xOffset, y: waypoints[0].y },
+        });
+        enemies.push(enemy);
       }
       enemiesSpeed += 0.1;
       setWave((wave) => wave + 1);
@@ -292,7 +228,7 @@ export function useGameSetup(
 
       for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
-        enemy.update();
+        enemy.update(ctx!, bee, waypoints, enemiesSpeed);
 
         if (enemy.position.x > canvas!.width) {
           setLives((prevLives) => prevLives - 1);
@@ -344,8 +280,8 @@ export function useGameSetup(
 
               if (enemyIndex > -1) {
                 enemies.splice(enemyIndex, 1);
-                setCurrency((prevCurrency) => prevCurrency + 15);
-                money += 15;
+                setCurrency((prevCurrency) => prevCurrency + 5);
+                money += 5;
               }
             }
 

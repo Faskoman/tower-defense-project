@@ -1,64 +1,83 @@
-// import { waypoints } from "../waypoints";
+export interface Enemy {
+  position: { x: number; y: number };
+  size: number;
+  waypointIndex: number;
+  center: { x: number; y: number };
+  health: number;
+  velocity: { x: number; y: number };
+  draw: (ctx: CanvasRenderingContext2D, bee: HTMLImageElement) => void;
+  update: (
+    ctx: CanvasRenderingContext2D,
+    bee: HTMLImageElement,
+    waypoints: {
+      x: number;
+      y: number;
+    }[],
+    enemiesSpeed: number
+  ) => void;
+}
 
-// export class Enemy {
-//   position: { x: number; y: number };
-//   width: number;
-//   height: number;
-//   waypointIndex: number;
-//   center: { x: number; y: number };
-//   health: number;
-//   velocity: { x: number; y: number };
+export function createEnemy({
+  position = { x: 0, y: 0 },
+}: {
+  position?: { x: number; y: number };
+}): Enemy {
+  const size = 80;
+  let waypointIndex = 0;
+  const center = {
+    x: position.x + size / 2,
+    y: position.y + size / 2,
+  };
+  let health = 100;
+  const velocity = { x: 0, y: 0 };
 
-//   constructor({ position = { x: 0, y: 0 } }) {
-//     this.position = position;
-//     this.width = 80;
-//     this.height = 80;
-//     this.waypointIndex = 0;
-//     this.center = {
-//       x: this.position.x + this.width / 2,
-//       y: this.position.y + this.height / 2,
-//     };
-//     this.health = 100;
-//     this.velocity = {
-//       x: 0,
-//       y: 0,
-//     };
-//   }
+  function draw(ctx: CanvasRenderingContext2D, bee: HTMLImageElement) {
+    ctx.drawImage(bee, position.x, position.y, size, size);
+  }
 
-//   draw(ctx: CanvasRenderingContext2D, beeImage: HTMLImageElement) {
-//     ctx.drawImage(
-//       beeImage,
-//       this.position.x,
-//       this.position.y,
-//       this.width,
-//       this.height
-//     );
-//   }
+  function update(
+    ctx: CanvasRenderingContext2D,
+    bee: HTMLImageElement,
+    waypoints: {
+      x: number;
+      y: number;
+    }[],
+    enemiesSpeed: number
+  ) {
+    draw(ctx, bee);
 
-//   update() {
-//     const waypoint = waypoints[this.waypointIndex];
-//     const yDistance = waypoint.y - this.center.y;
-//     const xDistance = waypoint.x - this.center.x;
-//     const angle = Math.atan2(yDistance, xDistance);
+    const waypoint = waypoints[waypointIndex];
+    const yDistance = waypoint.y - center.y;
+    const xDistance = waypoint.x - center.x;
+    const angle = Math.atan2(yDistance, xDistance);
 
-//     this.velocity.x = Math.cos(angle) * enemiesSpeed;
-//     this.velocity.y = Math.sin(angle) * enemiesSpeed;
+    velocity.x = Math.cos(angle) * enemiesSpeed;
+    velocity.y = Math.sin(angle) * enemiesSpeed;
 
-//     this.position.x += this.velocity.x;
-//     this.position.y += this.velocity.y;
-//     this.center = {
-//       x: this.position.x + this.width / 2,
-//       y: this.position.y + this.height / 2,
-//     };
+    position.x += velocity.x;
+    position.y += velocity.y;
+    center.x = position.x + size / 2;
+    center.y = position.y + size / 2;
 
-//     if (
-//       Math.abs(Math.round(this.center.x) - Math.round(waypoint.x)) <
-//         Math.abs(this.velocity.x) &&
-//       Math.abs(Math.round(this.center.y) - Math.round(waypoint.y)) <
-//         Math.abs(this.velocity.y) &&
-//       this.waypointIndex < waypoints.length - 1
-//     ) {
-//       this.waypointIndex++;
-//     }
-//   }
-// }
+    if (
+      Math.abs(Math.round(center.x) - Math.round(waypoint.x)) <
+        Math.abs(velocity.x) &&
+      Math.abs(Math.round(center.y) - Math.round(waypoint.y)) <
+        Math.abs(velocity.y) &&
+      waypointIndex < waypoints.length - 1
+    ) {
+      waypointIndex++;
+    }
+  }
+
+  return {
+    position,
+    size,
+    waypointIndex,
+    center,
+    health,
+    velocity,
+    draw,
+    update,
+  };
+}

@@ -9,7 +9,7 @@ function GamePage() {
   const [lives, setLives] = useState(10);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [currency, setCurrency] = useState(600);
+  const [currency, setCurrency] = useState(100);
 
   useGameSetup(
     canvasRef,

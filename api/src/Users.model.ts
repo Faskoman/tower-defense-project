@@ -3,6 +3,6 @@ export interface User {
   userName: string;
   hashedPassword: string;
   userId: string;
-  bestWave: number;
-  achievedAt: string;
+  bestWave?: number;
+  achievedAt?: string;
 };

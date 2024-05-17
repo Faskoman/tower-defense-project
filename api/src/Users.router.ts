@@ -26,21 +26,21 @@ router.get("/highScores", async (_, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    const { id, userName, hashedPassword, bestWave, achievedAt } = req.body;
+    const { id, userName, hashedPassword } = req.body;
 
     const connection = getConnection();
 
     await connection.execute(
-      `INSERT INTO users (id, userName, hashedPassword)
-        VALUES (?, ?, ?)`,
+      `INSERT INTO crm.users (id, userName, hashedPassword)
+        VALUES (?, ?, ?);`,
       [id, userName, hashedPassword]
     );
 
-    await connection.execute(
-      `INSERT INTO usersHighscores (userId, bestWave, achievedAt)
-        VALUES (?, ?, ?)`,
-      [id, bestWave, achievedAt]
-    );
+    // await connection.execute(
+    //   `INSERT INTO usersHighscores (userId, bestWave, achievedAt)
+    //     VALUES (?, ?, ?)`,
+    //   [id, bestWave, achievedAt]
+    // );
 
     res.status(201);
     res.end();

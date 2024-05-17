@@ -23,3 +23,30 @@ router.get("/highScores", async (_, res) => {
     res.status(500).json({ error: "couldn't find users..." });
   }
 });
+
+router.post("/register", async (req, res) => {
+  try {
+    const { id, userName, hashedPassword, bestWave, achievedAt } = req.body;
+
+    const connection = getConnection();
+
+    await connection.execute(
+      `INSERT INTO users (id, userName, hashedPassword)
+        VALUES (?, ?, ?)`,
+      [id, userName, hashedPassword]
+    );
+
+    await connection.execute(
+      `INSERT INTO usersHighscores (userId, bestWave, achievedAt)
+        VALUES (?, ?, ?)`,
+      [id, bestWave, achievedAt]
+    );
+
+    res.status(201);
+    res.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.json({ error: "something went wrong" });
+  }
+});

@@ -1,11 +1,13 @@
 import axios from "axios";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SHA256 } from "crypto-js";
 import "./Register.scss";
+import { AuthPageBackgroundBees } from "./AuthPageBackgroundBees";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,12 +31,13 @@ function LoginPage() {
 
       navigate("/");
     } catch (err) {
-      alert(`Invalid username or password.`);
+      setError(`Invalid username or password.`);
     }
   };
 
   return (
     <div className="register__background">
+      <AuthPageBackgroundBees />
       <div className="register-container">
         <form className="registerForm" onSubmit={handleSubmit}>
           <h1 className="registerForm__title">Login</h1>
@@ -46,9 +49,12 @@ function LoginPage() {
             <label htmlFor="password">Password: </label>
             <input type="password" name="password" id="password" required />
           </div>
+          {error && <p className="error-message">{error}</p>}
+          <Link to={`/register`} className="registerForm__switch-form">
+            Don't have a user? sign up
+          </Link>
           <button className="registerForm__button">Continue</button>
         </form>
-        <Link to={`/register`}>Don't have a user? sign up</Link>
       </div>
     </div>
   );

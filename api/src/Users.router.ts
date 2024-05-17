@@ -25,25 +25,32 @@ router.get("/highScores", async (_, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  try {
-    const { id, userName, hashedPassword } = req.body;
-
-    const connection = getConnection();
-
-    await connection.execute(
-      `INSERT INTO crm.users (id, userName, hashedPassword)
-        VALUES (?, ?, ?);`,
-      [id, userName, hashedPassword]
-    );
-
-    res.status(201);
-    res.end();
-  } catch (err) {
-    console.error(err);
-    res.status(500);
-    res.json({ error: "something went wrong" });
-  }
-});
+    try {
+      const { id, userName, hashedPassword } = req.body;
+  
+      const connection = getConnection();
+  
+      const [rows] = await connection.execute(
+        `SELECT * FROM crm.users WHERE userName = ?`,
+        [userName]
+      );
+  
+      if (Array.isArray(rows) && rows.length >  0) {
+        return res.status(409).json({ error: "Username already taken" });
+      }
+  
+      await connection.execute(
+        `INSERT INTO crm.users (id, userName, hashedPassword)
+          VALUES (?, ?, ?);`,
+        [id, userName, hashedPassword]
+      );
+  
+      res.status(201).end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Something went wrong" });
+    }
+  });
 
 router.post("/login", async (req, res) => {
   try {

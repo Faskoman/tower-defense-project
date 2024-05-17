@@ -8,11 +8,11 @@ router.get("/highScores", async (_, res) => {
     const connection = getConnection();
 
     let sqlQuery = `
-      SELECT crm.users.userName, crm.usershighscores.bestWave, crm.usershighscores.achievedAt
-      FROM crm.users
-      JOIN crm.usershighscores ON crm.users.id = crm.usershighscores.userId
-      ORDER BY crm.usershighscores.bestWave DESC
-      LIMIT 10;
+    SELECT defaultdb.users.userName, defaultdb.usersHighscores.bestWave, defaultdb.usersHighscores.achievedAt
+    FROM defaultdb.users
+    JOIN defaultdb.usersHighscores ON defaultdb.users.id = defaultdb.usersHighscores.userId
+    ORDER BY defaultdb.usersHighscores.bestWave DESC
+    LIMIT 10;
         `;
 
     const [result] = await connection.query(sqlQuery, []);
@@ -25,32 +25,32 @@ router.get("/highScores", async (_, res) => {
 });
 
 router.post("/register", async (req, res) => {
-    try {
-      const { id, userName, hashedPassword } = req.body;
-  
-      const connection = getConnection();
-  
-      const [rows] = await connection.execute(
-        `SELECT * FROM crm.users WHERE userName = ?`,
-        [userName]
-      );
-  
-      if (Array.isArray(rows) && rows.length >  0) {
-        return res.status(409).json({ error: "Username already taken" });
-      }
-  
-      await connection.execute(
-        `INSERT INTO crm.users (id, userName, hashedPassword)
-          VALUES (?, ?, ?);`,
-        [id, userName, hashedPassword]
-      );
-  
-      res.status(201).end();
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Something went wrong" });
+  try {
+    const { id, userName, hashedPassword } = req.body;
+
+    const connection = getConnection();
+
+    const [rows] = await connection.execute(
+      `SELECT * FROM defaultdb.users WHERE userName = ?`,
+      [userName]
+    );
+
+    if (Array.isArray(rows) && rows.length > 0) {
+      return res.status(409).json({ error: "Username already taken" });
     }
-  });
+
+    await connection.execute(
+      `INSERT INTO defaultdb.users (id, userName, hashedPassword)
+          VALUES (?, ?, ?);`,
+      [id, userName, hashedPassword]
+    );
+
+    res.status(201).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
 
 router.post("/login", async (req, res) => {
   try {
@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
     const connection = getConnection();
 
     const [userRows] = await connection.execute(
-      `SELECT * FROM crm.users
+      `SELECT * FROM defaultdb.users
           WHERE userName = ? AND hashedPassword = ?`,
       [userName, hashedPassword]
     );

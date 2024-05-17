@@ -32,9 +32,9 @@ function Menu() {
             <Link to={`/`}>
               <p className="menu__buttons">Continue</p>
             </Link>
-            <p className="menu__buttons --logout-button" onClick={handleLogout}>
+            <a className="menu__buttons --logout-button" onClick={handleLogout}>
               Logout
-            </p>
+            </a>
           </>
         ) : (
           <>

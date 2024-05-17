@@ -24,7 +24,8 @@ app.get("/", async (_, res) => {
     SELECT crm.users.userName, crm.usershighscores.bestWave, crm.usershighscores.achievedAt
     FROM crm.users
     JOIN crm.usershighscores ON crm.users.id = crm.usershighscores.userId
-    ORDER BY crm.usershighscores.bestWave DESC;
+    ORDER BY crm.usershighscores.bestWave DESC
+    LIMIT 10;
       `;
 
     const [result] = await connection.query(sqlQuery, []);

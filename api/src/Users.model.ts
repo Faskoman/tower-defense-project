@@ -1,4 +1,4 @@
-export interface Lead {
+export interface User {
   id: string;
   userName: string;
   hashedPassword: string;

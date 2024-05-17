@@ -33,9 +33,12 @@
 
     &__buttons {
         display: flex;
-        cursor: pointer;
         justify-content: space-evenly;
         user-select: none;
+
+        &__button {
+            cursor: pointer;
+        }
     }
 }
 
@@ -85,8 +88,6 @@
             user-select: none;
             cursor: pointer;
         }
-
-        &__menu__button {}
 
         &__menu__button,
         &__restart__button {

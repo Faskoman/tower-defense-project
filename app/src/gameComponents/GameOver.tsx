@@ -13,9 +13,9 @@ export function GameOver({ wave, restartGame }: GameOverProps) {
         <Link to={"/"} className="game-over__buttons__button">
           menu
         </Link>
-        <button className="game-over__buttons__button" onClick={restartGame}>
+        <a className="game-over__buttons__button" onClick={restartGame}>
           restart
-        </button>
+        </a>
       </span>
     </div>
   );

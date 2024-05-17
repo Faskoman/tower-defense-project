@@ -36,7 +36,7 @@ function GamePage() {
         lives={lives}
         restartGame={restartGame}
       />
-      {!gameOver ? <GameOver wave={wave} restartGame={restartGame} /> : ""}
+      {gameOver ? <GameOver wave={wave} restartGame={restartGame} /> : ""}
     </div>
   );
 }

@@ -17,6 +17,11 @@ app.get("/check", async (_, res) => {
 });
 
 app.get("/", async (_, res) => {
+  res.status(200);
+  res.json({ status: "OK" });
+});
+
+app.get("/highScores", async (_, res) => {
   try {
     const connection = getConnection();
 

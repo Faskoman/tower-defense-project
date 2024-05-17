@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SHA256 } from "crypto-js";
 import "./Register.scss";
 
-function LoginPage() {
+function RegisterPage() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -12,24 +12,25 @@ function LoginPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    const loginUser = {
+    const registerUser = {
+      id: crypto.randomUUID(),
       userName: formData.get("userName")!.toString(),
       hashedPassword: SHA256(formData.get("password")!.toString()).toString(),
     };
 
     try {
-      await axios.post("http://localhost:3000/users/login", loginUser);
+      await axios.post("http://localhost:3000/users/register", registerUser);
 
       const token = {
         secret: "SUPERSECRET",
-        userName: loginUser.userName,
+        userName: registerUser.userName,
       };
 
       sessionStorage.setItem("token", JSON.stringify(token));
 
       navigate("/");
     } catch (err) {
-      alert(`Invalid username or password.`);
+      console.error(err);
     }
   };
 
@@ -37,7 +38,7 @@ function LoginPage() {
     <div className="register__background">
       <div className="register-container">
         <form className="registerForm" onSubmit={handleSubmit}>
-          <h1 className="registerForm__title">Login</h1>
+          <h1 className="registerForm__title">Register</h1>
           <div className="registerForm__field">
             <label htmlFor="userName">Username: </label>
             <input type="text" name="userName" id="userName" required />
@@ -46,12 +47,12 @@ function LoginPage() {
             <label htmlFor="password">Password: </label>
             <input type="password" name="password" id="password" required />
           </div>
-          <button className="registerForm__button">Continue</button>
+          <button className="registerForm__button">Register</button>
         </form>
-        <Link to={`/register`}>Don't have a user? sign up</Link>
+        <Link to={`/login`}>Alredy registered? sign in</Link>
       </div>
     </div>
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

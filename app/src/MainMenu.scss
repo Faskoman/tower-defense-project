@@ -62,6 +62,8 @@
     }
 }
 
-.--logout-button {
+.--logout-button, .--login-button {
     margin-top: calc(100% - 2rem);
+    position: absolute;
+    bottom: 0;
 }

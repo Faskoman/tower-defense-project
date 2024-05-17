@@ -1,0 +1,53 @@
+.register__background {
+  background-color: skyblue;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-container {
+  background-color: rgba(0, 0, 0, 0.8);
+  height: fit-content;
+  width: fit-content;
+  padding: 3rem;
+  border-radius: 16px;
+}
+
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1rem;
+
+  &__title {
+    margin-block-end: 2rem;
+  }
+
+  &__field {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+.registerForm__button,
+.loginForm__button {
+  margin-block: 2rem;
+  margin-inline: auto;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 500;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: gold;
+  }
+}

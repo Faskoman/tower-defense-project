@@ -36,17 +36,34 @@ router.post("/register", async (req, res) => {
       [id, userName, hashedPassword]
     );
 
-    // await connection.execute(
-    //   `INSERT INTO usersHighscores (userId, bestWave, achievedAt)
-    //     VALUES (?, ?, ?)`,
-    //   [id, bestWave, achievedAt]
-    // );
-
     res.status(201);
     res.end();
   } catch (err) {
     console.error(err);
     res.status(500);
     res.json({ error: "something went wrong" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const { userName, hashedPassword } = req.body;
+
+    const connection = getConnection();
+
+    const [userRows] = await connection.execute(
+      `SELECT * FROM crm.users
+          WHERE userName = ? AND hashedPassword = ?`,
+      [userName, hashedPassword]
+    );
+
+    if (Array.isArray(userRows) && userRows.length > 0) {
+      res.status(200).json({ message: "Login successful" });
+    } else {
+      res.status(401).json({ error: "Unauthorized" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
   }
 });

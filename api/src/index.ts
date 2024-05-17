@@ -17,6 +17,11 @@ app.get("/check", async (_, res) => {
   res.json({ status: "OK" });
 });
 
+app.get("/", async (_, res) => {
+  res.status(200);
+  res.json({ status: "OK" });
+});
+
 async function init() {
   await initConnection();
   app.listen(3000, () => console.log("Server running on localhost:3000"));

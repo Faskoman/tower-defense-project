@@ -4,7 +4,7 @@ import Flower from "./Components/Flower";
 export function HomeBackground() {
   return (
     <div className="container">
-      <BackgroundBee scale={0.1} topLocation={15} startingDelayInSeconds={4} />
+      <BackgroundBee scale={0.1} topLocation={15} startingDelayInSeconds={7} />
       <BackgroundBee scale={0.1} topLocation={10} startingDelayInSeconds={0} />
       <Bee />
       <Flower />

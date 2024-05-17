@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { waypoints } from "./waypoints";
-import { placements } from "./placements";
+import { waypoints } from "./entities/waypoints";
+import { placements } from "./entities/placements";
 
 export function useGameSetup(
   canvasRef: React.RefObject<HTMLCanvasElement>,

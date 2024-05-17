@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import "./Bee.scss";
+import "../styles/Bee.scss";
 
 type BeeProps = {
   topLocation?: number;

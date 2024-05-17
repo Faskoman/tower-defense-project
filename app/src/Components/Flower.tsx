@@ -1,4 +1,4 @@
-import "./Flower.scss"
+import "../styles/Flower.scss"
 
 function Flower() {
     return (

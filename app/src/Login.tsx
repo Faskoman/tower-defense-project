@@ -2,8 +2,8 @@ import axios from "axios";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SHA256 } from "crypto-js";
-import "./Register.scss";
-import { AuthPageBackgroundBees } from "./AuthPageBackgroundBees";
+import { AuthPageBackgroundBees } from "./Components/AuthPageBackgroundBees";
+import "./styles/Register.scss";
 
 function LoginPage() {
   const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
-import Menu from "./Menu";
+import Menu from "./Components/Menu";
 import axios from "axios";
 import { User } from "./Users.model";
 import { HomeBackground } from "./HomeBackground";
-import "./MainMenu.scss";
-import { Leaderboards } from "./Leaderboards";
+import { Leaderboards } from "./Components/Leaderboards";
+import "./styles/MainMenu.scss";
 
 export async function loader({}: LoaderFunctionArgs) {
   try {

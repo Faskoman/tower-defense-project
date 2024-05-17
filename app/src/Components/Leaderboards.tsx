@@ -1,5 +1,5 @@
-import { User } from "./Users.model";
-import "./Leaderboards.scss"
+import { User } from "../Users.model";
+import "../styles/Leaderboards.scss"
 
 export function Leaderboards({ users }: { users: User[]; }) {
   return (

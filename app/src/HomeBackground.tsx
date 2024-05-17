@@ -1,5 +1,5 @@
-import { BackgroundBee, Bee } from "./Bee";
-import Flower from "./Flower";
+import { BackgroundBee, Bee } from "./Components/Bee";
+import Flower from "./Components/Flower";
 
 export function HomeBackground() {
   return (

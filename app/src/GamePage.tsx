@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import { useGameSetup } from "./gameSetup";
-import GameHeader from "./gameComponents/GameHeader";
-import { Canvas } from "./gameComponents/Canvas";
-import { GameOver } from "./gameComponents/GameOver";
-import "./GamePage.scss";
+import GameHeader from "./Components/GameHeader";
+import { Canvas } from "./Components/Canvas";
+import { GameOver } from "./Components/GameOver";
+import "./styles/GamePage.scss";
 
 function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

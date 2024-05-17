@@ -7,7 +7,7 @@ import "./MainMenu.scss";
 
 export async function loader({}: LoaderFunctionArgs) {
   try {
-    const res = await axios.get(`http://localhost:3000/highScores`);
+    const res = await axios.get(`http://localhost:3000/users/highScores`);
 
     return res.data;
   } catch (error) {

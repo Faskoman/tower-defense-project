@@ -4,6 +4,11 @@ import GamePage from "./GamePage";
 import { loader as usersLoader } from "./MainMenu";
 import RegisterPage from "./Register";
 import LoginPage from "./Login";
+import axios from "axios";
+
+export const server = axios.create({
+  baseURL: "https://tower-defense-project-api.onrender.com",
+});
 
 export const router = createBrowserRouter([
   {

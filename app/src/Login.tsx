@@ -1,9 +1,9 @@
-import axios from "axios";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SHA256 } from "crypto-js";
 import { AuthPageBackgroundBees } from "./Components/AuthPageBackgroundBees";
 import "./styles/Register.scss";
+import { server } from "./router";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ function LoginPage() {
     };
 
     try {
-      await axios.post("http://localhost:3000/users/login", loginUser);
+      await server.post("/users/login", loginUser);
 
       const token = {
         secret: "SUPERSECRET",

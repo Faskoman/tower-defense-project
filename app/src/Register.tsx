@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SHA256 } from "crypto-js";
 import { AuthPageBackgroundBees } from "./Components/AuthPageBackgroundBees";
 import "./styles/Register.scss";
+import { server } from "./router";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function RegisterPage() {
     };
 
     try {
-      await axios.post("http://localhost:3000/users/register", registerUser);
+      await server.post("/users/register", registerUser);
 
       const token = {
         secret: "SUPERSECRET",

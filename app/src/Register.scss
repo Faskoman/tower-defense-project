@@ -61,8 +61,11 @@ body {
   position: absolute;
 }
 
-.registerForm__switch-form {
+.registerForm__links {
   margin-block: 2rem;
+  display: flex;
+  flex-flow: column;
+  gap: 1ch;
 }
 
 .error-message {

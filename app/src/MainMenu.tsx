@@ -4,6 +4,7 @@ import axios from "axios";
 import { User } from "./Users.model";
 import { HomeBackground } from "./HomeBackground";
 import "./MainMenu.scss";
+import { Leaderboards } from "./Leaderboards";
 
 export async function loader({}: LoaderFunctionArgs) {
   try {
@@ -21,39 +22,13 @@ export function MainMenu() {
 
   return (
     <>
-      <Menu />
-      <HomeBackground />
-      {users ? <Leaderboards users={users} /> : "No Leaderboards" }
+      <main className="mainMenu-main">
+        <Menu />
+        <HomeBackground />
+        {users ? <Leaderboards users={users} /> : "No Leaderboards" }
+      </main>
     </>
   );
 }
 
 export default MainMenu;
-
-function Leaderboards({ users }: { users: User[] }) {
-  return (
-    <div>
-      <h2>Leaderboards</h2>
-      <table>
-        <thead>
-          <tr>
-            <th> </th>
-            <th>Name</th>
-            <th>Wave</th>
-            <th>At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{user.userName}</td>
-              <td>{user.bestWave}</td>
-              <td>{user.achievedAt.slice(0, 10)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}

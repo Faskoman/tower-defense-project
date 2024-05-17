@@ -1,0 +1,15 @@
+.leaderboard {
+    position: absolute;
+    top: 1rem;
+    right: 2vw;
+    color: darkblue;
+
+    &__table-head {
+            padding-inline-end: 1rem;
+            font-weight: 700;
+    }
+
+    &__place-number {
+        font-weight: 700;
+    }
+}

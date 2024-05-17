@@ -50,9 +50,12 @@ function LoginPage() {
             <input type="password" name="password" id="password" required />
           </div>
           {error && <p className="error-message">{error}</p>}
-          <Link to={`/register`} className="registerForm__switch-form">
-            Don't have a user? sign up
-          </Link>
+          <div className="registerForm__links">
+            <Link to={`/register`} className="registerForm__switch-form">
+              Don't have a user? sign up
+            </Link>
+            <Link to={`/`}>Continue as Guest</Link>
+          </div>
           <button className="registerForm__button">Continue</button>
         </form>
       </div>

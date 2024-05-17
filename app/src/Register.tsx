@@ -60,9 +60,10 @@ function RegisterPage() {
             <input type="password" name="password" id="password" required />
           </div>
           {error && <p className="error-message">{error}</p>}
-          <Link to={`/login`} className="registerForm__switch-form">
-            Already registered? Sign in
-          </Link>
+          <div className="registerForm__links">
+            <Link to={`/login`}>Already registered? Sign in</Link>
+            <Link to={`/`}>Continue as Guest</Link>
+          </div>
           <button className="registerForm__button">Register</button>
         </form>
       </div>
